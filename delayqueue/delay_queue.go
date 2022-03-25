@@ -2,9 +2,9 @@ package delayQueue
 
 import (
 	"fmt"
+	"github.com/hxy1991/sdk-go/log"
+	rabbitMQ "github.com/hxy1991/sdk-go/mq/rabbitmq"
 	amqp "github.com/rabbitmq/amqp091-go"
-	"sdk-go/log"
-	rabbitMQ "sdk-go/mq/rabbitmq"
 	"strconv"
 	"sync"
 	"time"

@@ -1,4 +1,4 @@
-module sdk-go
+module github.com/hxy1991/sdk-go
 
 go 1.17
 

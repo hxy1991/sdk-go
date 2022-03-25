@@ -3,7 +3,7 @@ package async
 import (
 	"context"
 	"github.com/aws/aws-xray-sdk-go/xray"
-	"sdk-go/log"
+	"github.com/hxy1991/sdk-go/log"
 )
 
 func Go(c context.Context, name string, fn func(context.Context)) {

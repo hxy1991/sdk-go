@@ -4,10 +4,10 @@ import (
 	"bytes"
 	"context"
 	"github.com/aws/aws-xray-sdk-go/xray"
+	"github.com/hxy1991/sdk-go/log"
 	"io"
 	"io/ioutil"
 	"net/http"
-	"sdk-go/log"
 	"time"
 )
 

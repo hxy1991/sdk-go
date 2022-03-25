@@ -3,10 +3,10 @@ package log
 import (
 	"context"
 	"github.com/aws/aws-xray-sdk-go/xray"
+	"github.com/hxy1991/sdk-go/utils"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"os"
-	"sdk-go/utils"
 )
 
 type Logger struct {
