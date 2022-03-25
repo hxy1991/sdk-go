@@ -3,7 +3,7 @@ package delayQueue
 import (
 	"fmt"
 	amqp "github.com/rabbitmq/amqp091-go"
-	"sdk-go/logger"
+	"sdk-go/log"
 	rabbitMQ "sdk-go/mq/rabbitmq"
 	"strconv"
 	"sync"
@@ -23,21 +23,21 @@ func New(name string) (*DelayQueue, error) {
 	initConnection.Do(func() {
 		_producerConn, err := rabbitMQ.New()
 		if err != nil {
-			logger.Error(err)
+			log.Error(err)
 			return
 		}
 		producerConn = _producerConn
 
-		logger.With().Info("init shared producer connection of all delayQueues successfully")
+		log.With().Info("init shared producer connection of all delayQueues successfully")
 
 		_consumerConn, err := rabbitMQ.New()
 		if err != nil {
-			logger.With().Error(err)
+			log.With().Error(err)
 			return
 		}
 		consumerConn = _consumerConn
 
-		logger.With().Info("init shared consumer connection of all delayQueues successfully")
+		log.With().Info("init shared consumer connection of all delayQueues successfully")
 	})
 
 	if producerConn == nil {
@@ -155,7 +155,7 @@ func (d DelayQueue) Consume(callback func(amqp.Delivery)) error {
 	go func() {
 		defer func() {
 			if e := recover(); e != nil {
-				logger.With("queueName", name).Error(e)
+				log.With("queueName", name).Error(e)
 			}
 		}()
 
@@ -164,7 +164,7 @@ func (d DelayQueue) Consume(callback func(amqp.Delivery)) error {
 		}
 	}()
 
-	logger.With("queueName", name).Info("consumer is waiting")
+	log.With("queueName", name).Info("consumer is waiting")
 
 	return nil
 }
@@ -173,7 +173,7 @@ func (d DelayQueue) closeChannel(ch *amqp.Channel) {
 	func(ch *amqp.Channel) {
 		err := ch.Close()
 		if err != nil {
-			logger.With().Error(err)
+			log.With().Error(err)
 		}
 	}(ch)
 }
