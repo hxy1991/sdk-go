@@ -49,6 +49,11 @@ type InnerHits struct {
 	Source interface{} `json:"_source"`
 }
 
+type ClearScrollResponse struct {
+	Succeeded bool `json:"succeeded"`
+	NumFreed  int  `json:"num_freed"`
+}
+
 type OpenSearch struct {
 	client    *opensearch.Client
 	indexName string
@@ -244,4 +249,39 @@ func (openSearch *OpenSearch) Scroll(ctx context.Context, scrollID string, scrol
 		return nil, err
 	}
 	return &searchResponse, nil
+}
+
+// Scroll scroll 参数告诉 OpenSearch 把搜索上下文再保持多久时间
+func (openSearch *OpenSearch) ClearScroll(ctx context.Context, scrollId []string) (*ClearScrollResponse, error) {
+	scrollRequest := opensearchapi.ClearScrollRequest{
+		ScrollID: scrollId,
+	}
+
+	response, err := scrollRequest.Do(ctx, openSearch.client)
+	if err != nil {
+		return nil, err
+	}
+
+	if response.StatusCode != http.StatusOK {
+		return nil, errors.New(response.String())
+	}
+
+	defer func(Body io.ReadCloser) {
+		closeErr := Body.Close()
+		if closeErr != nil {
+			log.Error(closeErr)
+		}
+	}(response.Body)
+
+	body, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var clearScrollResponse ClearScrollResponse
+	err = json.Unmarshal(body, &clearScrollResponse)
+	if err != nil {
+		return nil, err
+	}
+	return &clearScrollResponse, nil
 }

@@ -83,6 +83,14 @@ func TestOpenSearch_Scroll(t *testing.T) {
 				scrollId = got.ScrollId
 
 				if len(got.Hits.Hits) <= 0 {
+					csr, err := client.ClearScroll(tt.args.ctx, []string{scrollId})
+					if (err != nil) != tt.wantErr {
+						t.Errorf("Scroll() error = %v, wantErr %v", err, tt.wantErr)
+						return
+					}
+
+					t.Log(csr)
+
 					break
 				}
 			}
