@@ -15,6 +15,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 )
 
 type SearchResponse struct {
@@ -22,6 +23,7 @@ type SearchResponse struct {
 	TimedOut bool    `json:"timed_out"`
 	Shards   *Shards `json:"_shards"`
 	Hits     *Hits   `json:"hits"`
+	ScrollId string  `json:"_scroll_id"`
 }
 type Shards struct {
 	Total      int `json:"total"`
@@ -166,11 +168,16 @@ func (openSearch *OpenSearch) DeleteIndex(ctx context.Context) (*opensearchapi.R
 }
 
 func (openSearch *OpenSearch) Search(ctx context.Context, searchJSONBody string) (*SearchResponse, error) {
+	return openSearch.SearchWithScroll(ctx, searchJSONBody, time.Duration(0))
+}
+
+func (openSearch *OpenSearch) SearchWithScroll(ctx context.Context, searchJSONBody string, scroll time.Duration) (*SearchResponse, error) {
 	content := strings.NewReader(searchJSONBody)
 
 	searchRequest := opensearchapi.SearchRequest{
-		Index: []string{openSearch.indexName},
-		Body:  content,
+		Index:  []string{openSearch.indexName},
+		Body:   content,
+		Scroll: scroll,
 	}
 
 	response, err := searchRequest.Do(ctx, openSearch.client)
@@ -201,4 +208,40 @@ func (openSearch *OpenSearch) Search(ctx context.Context, searchJSONBody string)
 	}
 	return &searchResponse, nil
 
+}
+
+// Scroll scroll 参数告诉 OpenSearch 把搜索上下文再保持多久时间
+func (openSearch *OpenSearch) Scroll(ctx context.Context, scrollID string, scroll time.Duration) (*SearchResponse, error) {
+	scrollRequest := opensearchapi.ScrollRequest{
+		ScrollID: scrollID,
+		Scroll:   scroll,
+	}
+
+	response, err := scrollRequest.Do(ctx, openSearch.client)
+	if err != nil {
+		return nil, err
+	}
+
+	if response.StatusCode != http.StatusOK {
+		return nil, errors.New(response.String())
+	}
+
+	defer func(Body io.ReadCloser) {
+		closeErr := Body.Close()
+		if closeErr != nil {
+			log.Error(closeErr)
+		}
+	}(response.Body)
+
+	body, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var searchResponse SearchResponse
+	err = json.Unmarshal(body, &searchResponse)
+	if err != nil {
+		return nil, err
+	}
+	return &searchResponse, nil
 }
