@@ -8,7 +8,6 @@ require (
 	github.com/aws/aws-xray-sdk-go v1.6.0
 	github.com/gin-gonic/gin v1.7.7
 	github.com/golang-jwt/jwt v3.2.2+incompatible
-	github.com/mitchellh/mapstructure v1.4.3
 	github.com/opensearch-project/opensearch-go v1.1.0
 	github.com/rabbitmq/amqp091-go v1.3.0
 	github.com/toolkits/net v0.0.0-20160910085801-3f39ab6fe3ce
@@ -18,11 +17,11 @@ require (
 require (
 	github.com/andybalholm/brotli v1.0.1 // indirect
 	github.com/aws/aws-sdk-go v1.42.27 // indirect
-	github.com/aws/aws-sdk-go-v2 v1.16.1 // indirect
+	github.com/aws/aws-sdk-go-v2 v1.16.2 // indirect
 	github.com/aws/aws-sdk-go-v2/credentials v1.11.1 // indirect
 	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.12.2 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/configsources v1.1.8 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.4.2 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/configsources v1.1.9 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.4.3 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/ini v1.3.9 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.9.2 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sso v1.11.2 // indirect

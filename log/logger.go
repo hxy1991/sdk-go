@@ -2,7 +2,7 @@ package log
 
 import (
 	"context"
-	"github.com/aws/aws-xray-sdk-go/xray"
+	awsxray "github.com/hxy1991/sdk-go/aws/xray"
 	"github.com/hxy1991/sdk-go/utils"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -101,32 +101,15 @@ func (l *Logger) Context(ctx context.Context) (logger *Logger) {
 		_logger: l._logger,
 	}
 
-	defer func() {
-		if r := recover(); r != nil {
-			logger.Warn("no segment found")
-		}
-	}()
+	segmentId, traceId := awsxray.GetSegmentAndTraceId(ctx)
 
-	sCtx, seg := xray.BeginSubsegment(ctx, "zap-x-ray-log")
-	seg.Close(nil)
-
-	traceId := seg.TraceID
-	if traceId == "" {
-		traceId = xray.TraceID(sCtx)
-	}
-	if traceId == "" {
-		traceId = xray.TraceID(ctx)
-	}
 	if traceId != "" {
 		logger._logger = logger._logger.With(zap.String("xray-trace-id", traceId))
 	}
 
-	segmentId := seg.ParentSegment.ID
 	if segmentId != "" {
 		logger._logger = logger._logger.With(zap.String("xray-segment-id", segmentId))
 	}
-
-	seg.ParentSegment.RemoveSubsegment(seg)
 
 	return logger
 }
