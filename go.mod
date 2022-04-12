@@ -3,20 +3,22 @@ module github.com/hxy1991/sdk-go
 go 1.17
 
 require (
+	github.com/aws/aws-sdk-go v1.42.31
 	github.com/aws/aws-sdk-go-v2/config v1.15.2
 	github.com/aws/aws-sdk-go-v2/service/secretsmanager v1.15.3
 	github.com/aws/aws-xray-sdk-go v1.6.0
 	github.com/gin-gonic/gin v1.7.7
 	github.com/golang-jwt/jwt v3.2.2+incompatible
+	github.com/google/uuid v1.3.0
 	github.com/opensearch-project/opensearch-go v1.1.0
 	github.com/rabbitmq/amqp091-go v1.3.0
+	github.com/stretchr/testify v1.7.0
 	github.com/toolkits/net v0.0.0-20160910085801-3f39ab6fe3ce
 	go.uber.org/zap v1.20.0
 )
 
 require (
 	github.com/andybalholm/brotli v1.0.1 // indirect
-	github.com/aws/aws-sdk-go v1.42.27 // indirect
 	github.com/aws/aws-sdk-go-v2 v1.16.2 // indirect
 	github.com/aws/aws-sdk-go-v2/credentials v1.11.1 // indirect
 	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.12.2 // indirect
@@ -27,6 +29,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/sso v1.11.2 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sts v1.16.2 // indirect
 	github.com/aws/smithy-go v1.11.2 // indirect
+	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-playground/locales v0.13.0 // indirect
 	github.com/go-playground/universal-translator v0.17.0 // indirect
@@ -40,6 +43,7 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421 // indirect
 	github.com/modern-go/reflect2 v0.0.0-20180701023420-4b7aa43c6742 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/ugorji/go/codec v1.1.7 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.24.0 // indirect
@@ -53,4 +57,5 @@ require (
 	google.golang.org/grpc v1.35.0 // indirect
 	google.golang.org/protobuf v1.25.0 // indirect
 	gopkg.in/yaml.v2 v2.2.8 // indirect
+	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )
