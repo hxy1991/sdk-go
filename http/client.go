@@ -11,17 +11,21 @@ import (
 	"time"
 )
 
-func Post(ctx context.Context, url string, requestBody []byte) ([]byte, error) {
+func Send(ctx context.Context, url, method string, requestBody []byte) ([]byte, error) {
 	var responseBody []byte
 
 	defer func() {
-		log.Context(ctx).With("url", url).With("requestBody", string(requestBody), "responseBody", string(responseBody)).Debug()
+		log.Context(ctx).
+			With("url", url).
+			With("method", method).
+			With("requestBody", string(requestBody), "responseBody", string(responseBody)).
+			Debug()
 	}()
 
 	httpClient := xray.Client(&http.Client{Timeout: time.Second * 5})
 
 	request, err := http.NewRequestWithContext(ctx,
-		"POST",
+		method,
 		url,
 		bytes.NewBuffer(requestBody),
 	)
