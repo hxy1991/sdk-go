@@ -29,6 +29,11 @@ func Send(ctx context.Context, url, method string, requestBody []byte) ([]byte, 
 		url,
 		bytes.NewBuffer(requestBody),
 	)
+
+	if nil != err {
+		return nil, err
+	}
+
 	request.Header.Set("Content-Type", "application/json")
 
 	response, err := httpClient.Do(request)
