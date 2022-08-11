@@ -80,6 +80,13 @@ func (l *Logger) With(args ...interface{}) *Logger {
 	}
 }
 
+func (l *Logger) WithMap(content map[string]interface{}) *Logger {
+	list := utils.Map2Slice(content)
+	return &Logger{
+		_logger: l._logger.With(list...),
+	}
+}
+
 func (l *Logger) Debugf(template string, args ...interface{}) {
 	l._logger.Debugf(template, args...)
 }

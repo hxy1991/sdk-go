@@ -2,7 +2,6 @@ package log
 
 import (
 	"context"
-	"github.com/hxy1991/sdk-go/utils"
 )
 
 var _defaultLogger = defaultLogger()
@@ -46,8 +45,7 @@ func With(args ...interface{}) *Logger {
 }
 
 func WithMap(content map[string]interface{}) *Logger {
-	list := utils.Map2Slice(content)
-	return _defaultLogger.With(list...)
+	return _defaultLogger.WithMap(content)
 }
 
 func Context(ctx context.Context) (logger *Logger) {
