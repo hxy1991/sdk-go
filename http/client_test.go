@@ -3,7 +3,6 @@ package http
 import (
 	"context"
 	"fmt"
-	"reflect"
 	"testing"
 )
 
@@ -36,17 +35,13 @@ func TestSend(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := Send(tt.args.ctx, tt.args.url, tt.args.method, tt.args.requestBody, tt.args.headers)
+			statusCode, got, err := Send(tt.args.ctx, tt.args.url, tt.args.method, tt.args.requestBody, tt.args.headers)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Send() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 
-			fmt.Println(string(got))
-
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Send() got = %v, want %v", got, tt.want)
-			}
+			fmt.Println(statusCode, " ", string(got))
 		})
 	}
 }

@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func Send(ctx context.Context, url, method string, requestBody []byte, headers map[string]string) ([]byte, error) {
+func Send(ctx context.Context, url, method string, requestBody []byte, headers map[string]string) (int, []byte, error) {
 	var responseBody []byte
 
 	defer func() {
@@ -31,7 +31,7 @@ func Send(ctx context.Context, url, method string, requestBody []byte, headers m
 	)
 
 	if nil != err {
-		return nil, err
+		return 0, nil, err
 	}
 
 	request.Header.Set("Content-Type", "application/json")
@@ -42,7 +42,7 @@ func Send(ctx context.Context, url, method string, requestBody []byte, headers m
 
 	response, err := httpClient.Do(request)
 	if err != nil {
-		return nil, err
+		return 0, nil, err
 	}
 
 	defer func(body io.ReadCloser) {
@@ -54,8 +54,8 @@ func Send(ctx context.Context, url, method string, requestBody []byte, headers m
 
 	responseBody, err = ioutil.ReadAll(response.Body)
 	if err != nil {
-		return nil, err
+		return 0, nil, err
 	}
 
-	return responseBody, nil
+	return response.StatusCode, responseBody, nil
 }
