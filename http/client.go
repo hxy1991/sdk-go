@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func Send(ctx context.Context, url, method string, requestBody []byte) ([]byte, error) {
+func Send(ctx context.Context, url, method string, requestBody []byte, headers map[string]string) ([]byte, error) {
 	var responseBody []byte
 
 	defer func() {
@@ -35,6 +35,10 @@ func Send(ctx context.Context, url, method string, requestBody []byte) ([]byte, 
 	}
 
 	request.Header.Set("Content-Type", "application/json")
+
+	for k, v := range headers {
+		request.Header.Set(k, v)
+	}
 
 	response, err := httpClient.Do(request)
 	if err != nil {
