@@ -82,7 +82,7 @@ func TestReplaceAllPunctuation(t *testing.T) {
 			containPunctuation := ContainPunctuationOrSymbol(tt.args.s)
 			assert.True(t, containPunctuation)
 
-			if got := ReplaceAllPunctuationOrSymbol(tt.args.s); got != tt.want {
+			if got := ReplaceAllPunctuationOrSymbol(tt.args.s, "*"); got != tt.want {
 				t.Errorf("ReplaceAllPunctuation() = %v, want %v", got, tt.want)
 			}
 		})
@@ -111,7 +111,7 @@ func TestReplaceAllEmoji(t *testing.T) {
 			containPunctuation := ContainEmoji(tt.args.s)
 			assert.True(t, containPunctuation)
 
-			if got := ReplaceAllEmoji(tt.args.s); got != tt.want {
+			if got := ReplaceAllEmoji(tt.args.s, "*"); got != tt.want {
 				t.Errorf("ReplaceAllEmoji() = %v, want %v", got, tt.want)
 			}
 		})

@@ -27,18 +27,18 @@ var emojiReg = regexp.MustCompile(`[#*0-9]\x{FE0F}?\x{20E3}|©\x{FE0F}?|[®\x{20
 
 //var emojiReg = regexp.MustCompile(`[\x{1F600}-\x{1F6FF}|[\x{2600}-\x{26FF}]`)
 
-func ReplaceAllPunctuationOrSymbol(s string) string {
-	return punctuationOrSymbolReg.ReplaceAllString(s, "*")
+func ReplaceAllPunctuationOrSymbol(src, repl string) string {
+	return punctuationOrSymbolReg.ReplaceAllString(src, repl)
 }
 
 func ContainPunctuationOrSymbol(s string) bool {
 	return punctuationOrSymbolReg.MatchString(s)
 }
 
-func ReplaceAllEmoji(s string) string {
-	return emojiReg.ReplaceAllString(s, "*")
-}
-
 func ContainEmoji(s string) bool {
 	return emojiReg.MatchString(s)
+}
+
+func ReplaceAllEmoji(src, repl string) string {
+	return emojiReg.ReplaceAllString(src, repl)
 }
