@@ -117,3 +117,34 @@ func TestReplaceAllEmoji(t *testing.T) {
 		})
 	}
 }
+
+func TestReplaceWhitespace(t *testing.T) {
+	type args struct {
+		src  string
+		repl string
+	}
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{
+		{
+			name: "",
+			args: args{
+				src:  "0 0\t0\r0\n0",
+				repl: "*",
+			},
+			want: "0*0*0*0*0",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			containWhitespace := ContainWhitespace(tt.args.src)
+			assert.True(t, containWhitespace)
+
+			if got := ReplaceWhitespace(tt.args.src, tt.args.repl); got != tt.want {
+				t.Errorf("ReplaceWhitespace() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
