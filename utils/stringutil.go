@@ -28,7 +28,11 @@ var emojiReg = regexp.MustCompile(`[#*0-9]\x{FE0F}?\x{20E3}|©\x{FE0F}?|[®\x{20
 //正则表达式中，使用 \s 元字符匹配任何单个的空白字符。准确的说，\s 元字符可以匹配一个空格符、一个制表符（\t）、一个换行符（\n）和一个回车符（\r）。
 var whitespaceReg = regexp.MustCompile("[\\s]+")
 
-//var emojiReg = regexp.MustCompile(`[\x{1F600}-\x{1F6FF}|[\x{2600}-\x{26FF}]`)
+// https://stackoverflow.com/questions/15861088/regex-to-match-only-language-chars-all-language
+// https://www.regular-expressions.info/unicode.html
+// \p{Mn}，等于 \p{Non_Spacing_Mark}，为了支持泰文，a character intended to be combined with another character that takes up extra space (vowel signs in many Eastern languages).
+// https://stackoverflow.com/questions/18037312/preg-match-unicode-does-not-work-with-some-languages
+var onlyLanguageOrNumberCharacterReg = regexp.MustCompile("^[0-9\\p{L}\\p{Mn}]*$")
 
 func ReplaceAllPunctuationOrSymbol(src, repl string) string {
 	return punctuationOrSymbolReg.ReplaceAllString(src, repl)
@@ -52,4 +56,12 @@ func ContainWhitespace(s string) bool {
 
 func ReplaceWhitespace(src, repl string) string {
 	return whitespaceReg.ReplaceAllString(src, repl)
+}
+
+func OnlyLanguageOrNumberCharacters(src string) bool {
+	return onlyLanguageOrNumberCharacterReg.MatchString(src)
+}
+
+func Contain(reg *regexp.Regexp, src string) bool {
+	return reg.MatchString(src)
 }
