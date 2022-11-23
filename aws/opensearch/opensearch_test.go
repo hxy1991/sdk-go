@@ -17,7 +17,7 @@ func _defaultClient() *OpenSearch {
 		panic("guildIndexName can not be empty, please set GUILD_INDEX_NAME env")
 	}
 
-	_client, err := New(guildIndexName)
+	_client, err := New(context.TODO(), guildIndexName)
 	if err != nil {
 		panic(err)
 	}

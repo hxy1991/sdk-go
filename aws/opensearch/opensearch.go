@@ -65,8 +65,8 @@ type config struct {
 	password       string
 }
 
-func New(indexName string) (openSearch *OpenSearch, err error) {
-	openSearchConfig := getOpenSearchConfig()
+func New(ctx context.Context, indexName string) (openSearch *OpenSearch, err error) {
+	openSearchConfig := getOpenSearchConfig(ctx)
 
 	var transport http.RoundTripper
 	transport = &http.Transport{
@@ -87,7 +87,7 @@ func New(indexName string) (openSearch *OpenSearch, err error) {
 	return &OpenSearch{client: client, indexName: indexName}, nil
 }
 
-func getOpenSearchConfig() *config {
+func getOpenSearchConfig(ctx context.Context) *config {
 	domainEndpoint := os.Getenv("OPEN_SEARCH_DOMAIN_ENDPOINT")
 	if domainEndpoint == "" {
 		panic("openSearch domainEndpoint can not be empty, please set OPEN_SEARCH_DOMAIN_ENDPOINT env")
@@ -108,12 +108,12 @@ func getOpenSearchConfig() *config {
 	return &config{
 		domainEndpoint: domainEndpoint,
 		username:       username,
-		password:       *getPassword(passwordSecretName),
+		password:       *getPassword(ctx, passwordSecretName),
 	}
 }
 
-func getPassword(passwordSecretName string) *string {
-	getSecretValueOutput, err := awssecretmanager.GetSecret(context.TODO(), passwordSecretName)
+func getPassword(ctx context.Context, passwordSecretName string) *string {
+	getSecretValueOutput, err := awssecretmanager.GetSecret(ctx, passwordSecretName)
 	if err != nil {
 		panic(err)
 	}
