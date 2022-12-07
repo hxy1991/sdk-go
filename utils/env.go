@@ -20,3 +20,7 @@ func IsDevelopment() bool {
 func IsTest() bool {
 	return strings.EqualFold(os.Getenv("SERVER_ENV"), "test")
 }
+
+func IsConsoleLog() bool {
+	return strings.EqualFold(os.Getenv("CONSOLE_LOG"), "1")
+}

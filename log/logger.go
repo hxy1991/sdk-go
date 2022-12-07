@@ -29,7 +29,7 @@ func defaultLogger() Logger {
 
 	var core zapcore.Core
 
-	if utils.IsDevelopment() {
+	if utils.IsConsoleLog() {
 		consoleEncoder := zapcore.NewConsoleEncoder(zap.NewDevelopmentEncoderConfig())
 		core = zapcore.NewTee(
 			zapcore.NewCore(consoleEncoder, stderrWriteSyncer, highPriority),
