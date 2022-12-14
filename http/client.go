@@ -3,6 +3,7 @@ package http
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"github.com/aws/aws-xray-sdk-go/xray"
 	"github.com/hxy1991/sdk-go/log"
 	"io"
@@ -12,6 +13,8 @@ import (
 )
 
 func Send(ctx context.Context, url, method string, requestBody []byte, headers map[string]string) (int, []byte, error) {
+	startTime := time.Now()
+
 	var responseBody []byte
 
 	defer func() {
@@ -19,6 +22,7 @@ func Send(ctx context.Context, url, method string, requestBody []byte, headers m
 			With("url", url).
 			With("method", method).
 			With("requestBody", string(requestBody), "responseBody", string(responseBody)).
+			With("latency", fmt.Sprintf("%13v", time.Now().Sub(startTime))).
 			Debug()
 	}()
 
