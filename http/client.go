@@ -13,6 +13,10 @@ import (
 )
 
 func Send(ctx context.Context, url, method string, requestBody []byte, headers map[string]string) (int, []byte, error) {
+	return SendWithTimeout(ctx, url, method, requestBody, headers, 5)
+}
+
+func SendWithTimeout(ctx context.Context, url, method string, requestBody []byte, headers map[string]string, second int) (int, []byte, error) {
 	startTime := time.Now()
 
 	var responseBody []byte
@@ -26,7 +30,7 @@ func Send(ctx context.Context, url, method string, requestBody []byte, headers m
 			Debug()
 	}()
 
-	httpClient := xray.Client(&http.Client{Timeout: time.Second * 5})
+	httpClient := xray.Client(&http.Client{Timeout: time.Duration(second) * time.Second})
 
 	request, err := http.NewRequestWithContext(ctx,
 		method,
