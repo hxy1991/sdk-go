@@ -3,14 +3,65 @@ package http
 import (
 	"bytes"
 	"context"
+	"crypto/tls"
 	"fmt"
 	"github.com/aws/aws-xray-sdk-go/xray"
 	"github.com/hxy1991/sdk-go/log"
 	"io"
 	"io/ioutil"
+	"net"
 	"net/http"
 	"time"
 )
+
+// Defaults for the HTTPTransportBuilder.
+var (
+	// Default connection pool options
+	DefaultHTTPTransportMaxIdleConns        = 200
+	DefaultHTTPTransportMaxIdleConnsPerHost = 50
+
+	// Default connection timeouts
+	DefaultHTTPTransportIdleConnTimeout       = 90 * time.Second
+	DefaultHTTPTransportTLSHandleshakeTimeout = 10 * time.Second
+	DefaultHTTPTransportExpectContinueTimeout = 1 * time.Second
+
+	// Default to TLS 1.2 for all HTTPS requests.
+	DefaultHTTPTransportTLSMinVersion uint16 = tls.VersionTLS12
+)
+
+// Timeouts for net.Dialer's network connection.
+var (
+	DefaultDialConnectTimeout   = 30 * time.Second
+	DefaultDialKeepAliveTimeout = 30 * time.Second
+)
+
+func defaultDialer() *net.Dialer {
+	return &net.Dialer{
+		Timeout:   DefaultDialConnectTimeout,
+		KeepAlive: DefaultDialKeepAliveTimeout,
+		DualStack: true,
+	}
+}
+
+func defaultHTTPTransport() *http.Transport {
+	dialer := defaultDialer()
+
+	tr := &http.Transport{
+		Proxy:                 http.ProxyFromEnvironment,
+		DialContext:           dialer.DialContext,
+		TLSHandshakeTimeout:   DefaultHTTPTransportTLSHandleshakeTimeout,
+		MaxIdleConns:          DefaultHTTPTransportMaxIdleConns,
+		MaxIdleConnsPerHost:   DefaultHTTPTransportMaxIdleConnsPerHost,
+		IdleConnTimeout:       DefaultHTTPTransportIdleConnTimeout,
+		ExpectContinueTimeout: DefaultHTTPTransportExpectContinueTimeout,
+		ForceAttemptHTTP2:     true,
+		TLSClientConfig: &tls.Config{
+			MinVersion: DefaultHTTPTransportTLSMinVersion,
+		},
+	}
+
+	return tr
+}
 
 func Send(ctx context.Context, url, method string, requestBody []byte, headers map[string]string) (int, []byte, error) {
 	return SendWithTimeout(ctx, url, method, requestBody, headers, 5)
@@ -30,7 +81,11 @@ func SendWithTimeout(ctx context.Context, url, method string, requestBody []byte
 			Debug()
 	}()
 
-	httpClient := xray.Client(&http.Client{Timeout: time.Duration(second) * time.Second})
+	client := &http.Client{}
+	client.Transport = defaultHTTPTransport()
+	client.Timeout = time.Duration(second) * time.Second
+
+	httpClient := xray.Client(client)
 
 	request, err := http.NewRequestWithContext(ctx,
 		method,
