@@ -81,9 +81,8 @@ func SendWithTimeout(ctx context.Context, url, method string, requestBody []byte
 			Debug()
 	}()
 
-	client := &http.Client{}
+	client := &http.Client{Timeout: time.Duration(second) * time.Second}
 	client.Transport = defaultHTTPTransport()
-	client.Timeout = time.Duration(second) * time.Second
 
 	httpClient := xray.Client(client)
 
