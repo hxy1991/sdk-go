@@ -16,6 +16,8 @@ import (
 
 // Defaults for the HTTPTransportBuilder.
 var (
+	DefaultTimeout = 5 * time.Second
+
 	// Default connection pool options
 	DefaultHTTPTransportMaxIdleConns        = 200
 	DefaultHTTPTransportMaxIdleConnsPerHost = 50
@@ -35,16 +37,12 @@ var (
 	DefaultDialKeepAliveTimeout = 30 * time.Second
 )
 
-func defaultDialer() *net.Dialer {
-	return &net.Dialer{
+func defaultHTTPTransport() *http.Transport {
+	dialer := &net.Dialer{
 		Timeout:   DefaultDialConnectTimeout,
 		KeepAlive: DefaultDialKeepAliveTimeout,
 		DualStack: true,
 	}
-}
-
-func defaultHTTPTransport() *http.Transport {
-	dialer := defaultDialer()
 
 	tr := &http.Transport{
 		Proxy:                 http.ProxyFromEnvironment,
@@ -62,6 +60,11 @@ func defaultHTTPTransport() *http.Transport {
 
 	return tr
 }
+
+var client = xray.Client(&http.Client{
+	Timeout:   DefaultTimeout,
+	Transport: defaultHTTPTransport(),
+})
 
 func Send(ctx context.Context, url, method string, requestBody []byte, headers map[string]string) (int, []byte, error) {
 	return SendWithTimeout(ctx, url, method, requestBody, headers, 5)
@@ -81,12 +84,10 @@ func SendWithTimeout(ctx context.Context, url, method string, requestBody []byte
 			Debug()
 	}()
 
-	client := &http.Client{Timeout: time.Duration(second) * time.Second}
-	client.Transport = defaultHTTPTransport()
+	newCtx, cancel := context.WithTimeout(ctx, time.Duration(second)*time.Second)
+	defer cancel()
 
-	httpClient := xray.Client(client)
-
-	request, err := http.NewRequestWithContext(ctx,
+	request, err := http.NewRequestWithContext(newCtx,
 		method,
 		url,
 		bytes.NewBuffer(requestBody),
@@ -102,7 +103,7 @@ func SendWithTimeout(ctx context.Context, url, method string, requestBody []byte
 		request.Header.Set(k, v)
 	}
 
-	response, err := httpClient.Do(request)
+	response, err := client.Do(request)
 	if err != nil {
 		return 0, nil, err
 	}
