@@ -2,7 +2,7 @@ package log
 
 import (
 	"context"
-	awsxray "github.com/hxy1991/sdk-go/aws/xray"
+	"github.com/aws/aws-xray-sdk-go/xray"
 	"github.com/hxy1991/sdk-go/utils"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -108,14 +108,14 @@ func (l *Logger) Context(ctx context.Context) (logger *Logger) {
 		_logger: l._logger,
 	}
 
-	segmentId, traceId := awsxray.GetSegmentAndTraceId(ctx)
-
+	traceId := xray.TraceID(ctx)
 	if traceId != "" {
 		logger._logger = logger._logger.With(zap.String("xray-trace-id", traceId))
 	}
 
-	if segmentId != "" {
-		logger._logger = logger._logger.With(zap.String("xray-segment-id", segmentId))
+	segment := xray.GetSegment(ctx)
+	if segment != nil && segment.ID != "" {
+		logger._logger = logger._logger.With(zap.String("xray-segment-id", segment.ID))
 	}
 
 	return logger
