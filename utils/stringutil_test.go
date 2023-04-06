@@ -343,3 +343,76 @@ func TestOnlyLanguageCharacters(t *testing.T) {
 		})
 	}
 }
+
+func TestContainChinese(t *testing.T) {
+	type args struct {
+		src string
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{
+			name: "",
+			args: args{
+				"Hello0Imonenicetomeetyou",
+			},
+			want: false,
+		},
+		{
+			name: "",
+			args: args{
+				// 日
+				"こんにちは0はじめまして",
+			},
+			want: false,
+		},
+		{
+			name: "",
+			args: args{
+				// 韩
+				"안녕하세요0만나서반가워요",
+			},
+			want: false,
+		},
+		{
+			name: "",
+			args: args{
+				// 西班牙
+				"bonjour0jesuisravidevousrencontrer",
+			},
+			want: false,
+		},
+		{
+			name: "",
+			args: args{
+				// 中文
+				"a你好0我很高兴认识你b",
+			},
+			want: true,
+		},
+		{
+			name: "",
+			args: args{
+				// 中文
+				"1你好，我很高兴认识你",
+			},
+			want: true,
+		},
+
+		{
+			name: "",
+			args: args{
+				// 中文
+				"你好，我很高兴认识你",
+			},
+			want: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equalf(t, tt.want, ContainChinese(tt.args.src), "ContainChinese(%v)", tt.args.src)
+		})
+	}
+}

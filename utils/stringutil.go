@@ -34,6 +34,8 @@ var whitespaceReg = regexp.MustCompile("[\\s]+")
 // https://stackoverflow.com/questions/18037312/preg-match-unicode-does-not-work-with-some-languages
 var onlyLanguageOrNumberCharacterReg = regexp.MustCompile("^[0-9\\p{L}\\p{Mn}]*$")
 
+var chineseReg = regexp.MustCompile("[\\p{Han}]+")
+
 func ReplaceAllPunctuationOrSymbol(src, repl string) string {
 	return punctuationOrSymbolReg.ReplaceAllString(src, repl)
 }
@@ -64,4 +66,8 @@ func OnlyLanguageOrNumberCharacters(src string) bool {
 
 func Contain(reg *regexp.Regexp, src string) bool {
 	return reg.MatchString(src)
+}
+
+func ContainChinese(src string) bool {
+	return chineseReg.MatchString(src)
 }
