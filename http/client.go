@@ -16,7 +16,7 @@ import (
 
 // Defaults for the HTTPTransportBuilder.
 var (
-	DefaultTimeout = 5 * time.Second
+	DefaultTimeout = 15 * time.Second
 
 	// Default connection pool options
 	DefaultHTTPTransportMaxIdleConns        = 200
