@@ -3,6 +3,7 @@ package log
 import (
 	"context"
 	"github.com/aws/aws-xray-sdk-go/xray"
+	"github.com/hxy1991/sdk-go/constant"
 	"github.com/hxy1991/sdk-go/utils"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -116,6 +117,21 @@ func (l *Logger) Context(ctx context.Context) (logger *Logger) {
 	segment := xray.GetSegment(ctx)
 	if segment != nil && segment.ID != "" {
 		logger._logger = logger._logger.With(zap.String("xray-segment-id", segment.ID))
+	}
+
+	userIdUint64, ok := ctx.Value(constant.UserIdUint64Key).(uint64)
+	if ok {
+		logger._logger = logger._logger.With(zap.Uint64("userId", userIdUint64))
+	}
+
+	accountIdUint64, ok := ctx.Value(constant.AccountIdUint64Key).(uint64)
+	if ok {
+		logger._logger = logger._logger.With(zap.Uint64("accountId", accountIdUint64))
+	}
+
+	serverIdInt, ok := ctx.Value(constant.ServerIdIntKey).(int)
+	if ok {
+		logger._logger = logger._logger.With(zap.Int("serverId", serverIdInt))
 	}
 
 	return logger
