@@ -12,6 +12,7 @@ import (
 
 type Logger struct {
 	_logger *zap.SugaredLogger
+	ctx     context.Context
 }
 
 func defaultLogger() Logger {
@@ -68,10 +69,12 @@ func (l *Logger) Info(args ...interface{}) {
 }
 
 func (l *Logger) Warn(args ...interface{}) {
+	l.withRequestBody()
 	l._logger.Warn(args...)
 }
 
 func (l *Logger) Error(args ...interface{}) {
+	l.withRequestBody()
 	l._logger.Error(args...)
 }
 
@@ -97,16 +100,28 @@ func (l *Logger) Infof(template string, args ...interface{}) {
 }
 
 func (l *Logger) Warnf(template string, args ...interface{}) {
+	l.withRequestBody()
 	l._logger.Warnf(template, args...)
 }
 
 func (l *Logger) Errorf(template string, args ...interface{}) {
+	l.withRequestBody()
 	l._logger.Errorf(template, args...)
+}
+
+func (l *Logger) withRequestBody() {
+	if l.ctx != nil {
+		requestBody, ok := l.ctx.Value(constant.RequestBodyKey).(string)
+		if ok {
+			l._logger = l._logger.With(zap.String("request-body", requestBody))
+		}
+	}
 }
 
 func (l *Logger) Context(ctx context.Context) (logger *Logger) {
 	logger = &Logger{
 		_logger: l._logger,
+		ctx:     ctx,
 	}
 
 	traceId := xray.TraceID(ctx)

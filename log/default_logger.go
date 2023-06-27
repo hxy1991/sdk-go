@@ -37,6 +37,8 @@ func Warnf(template string, args ...interface{}) {
 }
 
 func Errorf(template string, args ...interface{}) {
+	_defaultLogger.withRequestBody()
+
 	_logger.Errorf(template, args...)
 }
 
