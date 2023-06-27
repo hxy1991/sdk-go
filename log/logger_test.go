@@ -11,7 +11,8 @@ func TestNewLogger(t *testing.T) {
 }
 
 func TestLogger_Errorf(t *testing.T) {
-	ctx := context.WithValue(context.Background(), constant.RequestBodyKey, "123")
+	ctx := context.WithValue(context.Background(), constant.RequestPathKey, "/test")
+	ctx = context.WithValue(ctx, constant.RequestBodyKey, "{\n    \"token\": \"token\"\n}")
 
 	_defaultLogger.Context(ctx).Debugf("test")
 	_defaultLogger.Context(ctx).Infof("test")

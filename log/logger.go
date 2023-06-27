@@ -69,12 +69,12 @@ func (l *Logger) Info(args ...interface{}) {
 }
 
 func (l *Logger) Warn(args ...interface{}) {
-	l.withRequestBody()
+	l.withRequestMsg()
 	l._logger.Warn(args...)
 }
 
 func (l *Logger) Error(args ...interface{}) {
-	l.withRequestBody()
+	l.withRequestMsg()
 	l._logger.Error(args...)
 }
 
@@ -100,20 +100,34 @@ func (l *Logger) Infof(template string, args ...interface{}) {
 }
 
 func (l *Logger) Warnf(template string, args ...interface{}) {
-	l.withRequestBody()
+	l.withRequestMsg()
 	l._logger.Warnf(template, args...)
 }
 
 func (l *Logger) Errorf(template string, args ...interface{}) {
-	l.withRequestBody()
+	l.withRequestMsg()
 	l._logger.Errorf(template, args...)
 }
 
-func (l *Logger) withRequestBody() {
+func (l *Logger) withRequestMsg() {
 	if l.ctx != nil {
+		requestPath, ok := l.ctx.Value(constant.RequestPathKey).(string)
+		if ok {
+			l._logger = l._logger.With(zap.String("request-path", requestPath))
+		}
+
 		requestBody, ok := l.ctx.Value(constant.RequestBodyKey).(string)
 		if ok {
 			l._logger = l._logger.With(zap.String("request-body", requestBody))
+		}
+	}
+}
+
+func (l *Logger) withRequestPath() {
+	if l.ctx != nil {
+		requestBody, ok := l.ctx.Value(constant.RequestPathKey).(string)
+		if ok {
+			l._logger = l._logger.With(zap.String("request-path", requestBody))
 		}
 	}
 }

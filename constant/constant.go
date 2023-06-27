@@ -10,5 +10,6 @@ const (
 	UserIdUint64Key    = "userIdUint64"
 	ServerIdIntKey     = "serverIdInt"
 
+	RequestPathKey = "request-path"
 	RequestBodyKey = "request-body"
 )

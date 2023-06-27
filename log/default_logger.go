@@ -33,11 +33,13 @@ func Infof(template string, args ...interface{}) {
 }
 
 func Warnf(template string, args ...interface{}) {
+	_defaultLogger.withRequestMsg()
+
 	_logger.Warnf(template, args...)
 }
 
 func Errorf(template string, args ...interface{}) {
-	_defaultLogger.withRequestBody()
+	_defaultLogger.withRequestMsg()
 
 	_logger.Errorf(template, args...)
 }
