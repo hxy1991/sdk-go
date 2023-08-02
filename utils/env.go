@@ -2,8 +2,13 @@ package utils
 
 import (
 	"os"
+	"strconv"
 	"strings"
 )
+
+var EnvVar struct {
+	FakeTimeOffset int
+}
 
 func IsProduction() bool {
 	return strings.HasPrefix(strings.ToLower(os.Getenv("SERVER_ENV")), "prod")
@@ -23,4 +28,14 @@ func IsTest() bool {
 
 func IsConsoleLog() bool {
 	return strings.EqualFold(os.Getenv("CONSOLE_LOG"), "1")
+}
+
+func init() {
+	if os.Getenv("FAKE_TIME_OFFSET") != "" {
+		offset, err := strconv.Atoi(os.Getenv("FAKE_TIME_OFFSET"))
+		if err != nil {
+			offset = 0
+		}
+		EnvVar.FakeTimeOffset = offset
+	}
 }
