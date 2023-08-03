@@ -12,6 +12,11 @@ func GetSegmentAndTraceId(ctx context.Context) (string, string) {
 		}
 	}()
 
+	segment := xray.GetSegment(ctx)
+	if segment == nil {
+		return "", ""
+	}
+
 	sCtx, seg := xray.BeginSubsegment(ctx, "zap-x-ray-log")
 	seg.Close(nil)
 
