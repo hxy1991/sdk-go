@@ -163,5 +163,10 @@ func (l *Logger) Context(ctx context.Context) (logger *Logger) {
 		logger._logger = logger._logger.With(zap.Int("serverId", serverIdInt))
 	}
 
+	runVersion := os.Getenv("RUN_VERSION")
+	if runVersion != "" {
+		logger._logger = logger._logger.With(zap.String("runVersion", runVersion))
+	}
+
 	return logger
 }
