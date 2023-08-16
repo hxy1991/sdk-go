@@ -74,12 +74,14 @@ func SendWithTimeout(ctx context.Context, url, method string, requestBody []byte
 	startTime := time.Now()
 
 	var responseBody []byte
+	var responseCode int
 
 	defer func() {
 		duration := time.Now().Sub(startTime)
 		log.Context(ctx).
 			With("url", url).
 			With("method", method).
+			With("responseCode", responseCode).
 			With("requestBody", string(requestBody), "responseBody", string(responseBody)).
 			With("latency", fmt.Sprintf("%13v", duration)).
 			With("latencyInNS", duration.Nanoseconds()).
@@ -121,6 +123,8 @@ func SendWithTimeout(ctx context.Context, url, method string, requestBody []byte
 	if err != nil {
 		return 0, nil, err
 	}
+
+	responseCode = response.StatusCode
 
 	return response.StatusCode, responseBody, nil
 }
