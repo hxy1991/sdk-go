@@ -83,6 +83,7 @@ func SendWithTimeout(ctx context.Context, url, method string, requestBody []byte
 			With("method", method).
 			With("responseCode", responseCode).
 			With("requestBody", string(requestBody), "responseBody", string(responseBody)).
+			With("requestHeader", headers).
 			With("latency", fmt.Sprintf("%13v", duration)).
 			With("latencyInNS", duration.Nanoseconds()).
 			Debug()
