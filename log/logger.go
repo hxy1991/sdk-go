@@ -113,12 +113,12 @@ func (l *Logger) withRequestMsg() {
 	if l.ctx != nil {
 		requestPath, ok := l.ctx.Value(constant.RequestPathKey).(string)
 		if ok {
-			l._logger = l._logger.With(zap.String("request-path", requestPath))
+			l._logger = l._logger.With(zap.String("requestPath", requestPath))
 		}
 
 		requestBody, ok := l.ctx.Value(constant.RequestBodyKey).(string)
 		if ok {
-			l._logger = l._logger.With(zap.String("request-body", requestBody))
+			l._logger = l._logger.With(zap.String("requestBody", requestBody))
 		}
 	}
 }
@@ -127,7 +127,7 @@ func (l *Logger) withRequestPath() {
 	if l.ctx != nil {
 		requestBody, ok := l.ctx.Value(constant.RequestPathKey).(string)
 		if ok {
-			l._logger = l._logger.With(zap.String("request-path", requestBody))
+			l._logger = l._logger.With(zap.String("requestPath", requestBody))
 		}
 	}
 }
