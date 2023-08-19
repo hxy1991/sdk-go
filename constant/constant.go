@@ -12,4 +12,7 @@ const (
 
 	RequestPathKey = "requestPath"
 	RequestBodyKey = "requestBody"
+
+	ClientVersion = "clientVersion"
+	ChannelIdKey  = "channelId"
 )
