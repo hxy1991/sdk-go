@@ -20,8 +20,17 @@ func Go(c context.Context, name string, fn func(context.Context)) {
 		}()
 	} else {
 		newCtx := xray.DetachContext(c)
-		newCtx = context.WithValue(newCtx, constant.ClientVersion, c.Value(constant.ClientVersion))
-		newCtx = context.WithValue(newCtx, constant.ChannelIdKey, c.Value(constant.ChannelIdKey))
+
+		clientVersion := c.Value(constant.ClientVersion)
+		if clientVersion != nil {
+			newCtx = context.WithValue(newCtx, constant.ClientVersion, clientVersion)
+		}
+
+		channelIdKey := c.Value(constant.ChannelIdKey)
+		if channelIdKey != nil {
+			newCtx = context.WithValue(newCtx, constant.ChannelIdKey, channelIdKey)
+		}
+
 		xray.CaptureAsync(newCtx, name, func(ctx context.Context) error {
 			fn(ctx)
 			return nil
