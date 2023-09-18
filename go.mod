@@ -10,12 +10,14 @@ require (
 	github.com/gin-gonic/gin v1.7.7
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/uuid v1.3.0
+	github.com/mroth/weightedrand v1.0.0
 	github.com/opensearch-project/opensearch-go v1.1.0
 	github.com/opensearch-project/opensearch-go/v2 v2.2.0
 	github.com/rabbitmq/amqp091-go v1.3.0
 	github.com/stretchr/testify v1.8.1
 	github.com/toolkits/net v0.0.0-20160910085801-3f39ab6fe3ce
 	go.uber.org/zap v1.20.0
+	google.golang.org/protobuf v1.25.0
 )
 
 require (
@@ -57,7 +59,6 @@ require (
 	golang.org/x/text v0.4.0 // indirect
 	google.golang.org/genproto v0.0.0-20210114201628-6edceaf6022f // indirect
 	google.golang.org/grpc v1.35.0 // indirect
-	google.golang.org/protobuf v1.25.0 // indirect
 	gopkg.in/yaml.v2 v2.2.8 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
