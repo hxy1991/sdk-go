@@ -15,4 +15,10 @@ const (
 
 	ClientVersion = "clientVersion"
 	ChannelIdKey  = "channelId"
+
+	RequestModuleKey        = "requestModule"
+	RequestActionKey        = "requestAction"
+	RequestSubActionsArrKey = "requestSubActions"
+	RequestSubActionsMD5Key = "requestSubActionsMD5"
+	ResponseErrorCodeIntKey = "responseErrorCode"
 )

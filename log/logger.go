@@ -168,5 +168,30 @@ func (l *Logger) Context(ctx context.Context) (logger *Logger) {
 		logger._logger = logger._logger.With(zap.String("runVersion", runVersion))
 	}
 
+	requestModule, ok := ctx.Value(constant.RequestModuleKey).(string)
+	if ok {
+		logger._logger = logger._logger.With(zap.String("requestModule", requestModule))
+	}
+
+	requestAction, ok := ctx.Value(constant.RequestActionKey).(string)
+	if ok {
+		logger._logger = logger._logger.With(zap.String("requestAction", requestAction))
+	}
+
+	requestSubActions, ok := ctx.Value(constant.RequestSubActionsArrKey).([]string)
+	if ok {
+		logger._logger = logger._logger.With(zap.Strings("requestSubActions", requestSubActions))
+	}
+
+	requestSubActionsMD5, ok := ctx.Value(constant.RequestSubActionsMD5Key).(string)
+	if ok {
+		logger._logger = logger._logger.With(zap.String("requestSubActionsMD5", requestSubActionsMD5))
+	}
+
+	responseErrorCode, ok := ctx.Value(constant.ResponseErrorCodeIntKey).(int)
+	if ok {
+		logger._logger = logger._logger.With(zap.Int("responseErrorCode", responseErrorCode))
+	}
+
 	return logger
 }
