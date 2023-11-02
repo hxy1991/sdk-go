@@ -12,10 +12,11 @@ func Go(c context.Context, name string, fn func(context.Context)) {
 		go func() {
 			defer func() {
 				if e := recover(); e != nil {
-					log.Error(e)
+					log.Context(c).Errorf("%+v", e)
 				}
 			}()
 
+			// 为什么这里要用context.Background()? 怕外层传入的 context 超时取消了，导致这里的 fn() 也被取消
 			fn(context.Background())
 		}()
 	} else {
