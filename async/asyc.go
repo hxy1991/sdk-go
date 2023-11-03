@@ -7,34 +7,40 @@ import (
 	"github.com/hxy1991/sdk-go/log"
 )
 
-func Go(c context.Context, name string, fn func(context.Context)) {
+func Go(ctx context.Context, name string, fn func(context.Context)) {
 	if xray.SdkDisabled() {
 		go func() {
 			defer func() {
 				if e := recover(); e != nil {
-					log.Context(c).Errorf("%+v", e)
+					log.Context(ctx).Errorf("%+v", e)
 				}
 			}()
 
 			// 为什么这里要用context.Background()? 怕外层传入的 context 超时取消了，导致这里的 fn() 也被取消
-			fn(context.Background())
+			newCtx := context.Background()
+			newCtx = WithValues(ctx, newCtx)
+			fn(newCtx)
 		}()
 	} else {
-		newCtx := xray.DetachContext(c)
-
-		clientVersion := c.Value(constant.ClientVersion)
-		if clientVersion != nil {
-			newCtx = context.WithValue(newCtx, constant.ClientVersion, clientVersion)
-		}
-
-		channelIdKey := c.Value(constant.ChannelIdKey)
-		if channelIdKey != nil {
-			newCtx = context.WithValue(newCtx, constant.ChannelIdKey, channelIdKey)
-		}
+		newCtx := xray.DetachContext(ctx)
+		newCtx = WithValues(ctx, newCtx)
 
 		xray.CaptureAsync(newCtx, name, func(ctx context.Context) error {
 			fn(ctx)
 			return nil
 		})
 	}
+}
+
+func WithValues(ctx context.Context, newCtx context.Context) context.Context {
+	clientVersion := ctx.Value(constant.ClientVersion)
+	if clientVersion != nil {
+		newCtx = context.WithValue(newCtx, constant.ClientVersion, clientVersion)
+	}
+
+	channelIdKey := ctx.Value(constant.ChannelIdKey)
+	if channelIdKey != nil {
+		newCtx = context.WithValue(newCtx, constant.ChannelIdKey, channelIdKey)
+	}
+	return newCtx
 }
