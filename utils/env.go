@@ -10,20 +10,22 @@ var EnvVar struct {
 	FakeTimeOffset int
 }
 
+var serverEnv = os.Getenv("SERVER_ENV")
+
 func IsProduction() bool {
-	return strings.HasPrefix(strings.ToLower(os.Getenv("SERVER_ENV")), "prod")
+	return strings.HasPrefix(strings.ToLower(serverEnv), "prod")
 }
 
 func IsPre() bool {
-	return strings.HasPrefix(strings.ToLower(os.Getenv("SERVER_ENV")), "pre")
+	return strings.HasPrefix(strings.ToLower(serverEnv), "pre")
 }
 
 func IsDevelopment() bool {
-	return strings.HasPrefix(strings.ToLower(os.Getenv("SERVER_ENV")), "dev")
+	return strings.HasPrefix(strings.ToLower(serverEnv), "dev")
 }
 
 func IsTest() bool {
-	return strings.HasPrefix(strings.ToLower(os.Getenv("SERVER_ENV")), "test")
+	return strings.HasPrefix(strings.ToLower(serverEnv), "test")
 }
 
 func IsConsoleLog() bool {

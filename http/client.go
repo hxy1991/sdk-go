@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/aws/aws-xray-sdk-go/xray"
 	"github.com/hxy1991/sdk-go/log"
+	"github.com/hxy1991/sdk-go/utils"
 	"io"
 	"io/ioutil"
 	"net"
@@ -78,7 +79,7 @@ func SendWithTimeout(ctx context.Context, url, method string, requestBody []byte
 
 	defer func() {
 		duration := time.Now().Sub(startTime)
-		if duration > 10*time.Millisecond || responseCode != 200 {
+		if duration > 10*time.Millisecond || responseCode != 200 || !utils.IsProduction() {
 			log.Context(ctx).
 				With("requestPath", url).
 				With("requestMethod", method).
