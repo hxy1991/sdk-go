@@ -59,6 +59,14 @@ type OpenSearch struct {
 	indexName string
 }
 
+func (openSearch *OpenSearch) GetClient() *opensearch.Client {
+	return openSearch.client
+}
+
+func (openSearch *OpenSearch) GetIndexName() string {
+	return openSearch.indexName
+}
+
 type config struct {
 	domainEndpoint string
 	username       string
