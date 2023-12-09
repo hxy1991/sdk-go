@@ -107,8 +107,8 @@ func NewWithAuth(ctx context.Context, indexName, username, password string) (ope
 	client, err := opensearch.NewClient(opensearch.Config{
 		Transport:            xray.RoundTripper(transport),
 		Addresses:            []string{openSearchConfig.domainEndpoint},
-		Username:             openSearchConfig.username,
-		Password:             openSearchConfig.password,
+		Username:             username,
+		Password:             password,
 		UseResponseCheckOnly: true,
 	})
 	if err != nil {
