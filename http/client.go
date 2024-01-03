@@ -68,10 +68,15 @@ var client = xray.Client(&http.Client{
 })
 
 func Send(ctx context.Context, url, method string, requestBody []byte, headers map[string]string) (int, []byte, error) {
-	return SendWithTimeout(ctx, url, method, requestBody, headers, 5)
+	return SendWithTimeout(ctx, url, method, requestBody, headers, 5, 10*time.Millisecond)
 }
 
-func SendWithTimeout(ctx context.Context, url, method string, requestBody []byte, headers map[string]string, second int) (int, []byte, error) {
+func SendWithLogMinDuration(ctx context.Context, url, method string, requestBody []byte, headers map[string]string, logMinDuration time.Duration) (int, []byte, error) {
+	return SendWithTimeout(ctx, url, method, requestBody, headers, 5, logMinDuration)
+}
+
+func SendWithTimeout(ctx context.Context, url, method string, requestBody []byte, headers map[string]string, second int,
+	logMinDuration time.Duration) (int, []byte, error) {
 	startTime := time.Now()
 
 	var responseBody []byte
@@ -79,7 +84,7 @@ func SendWithTimeout(ctx context.Context, url, method string, requestBody []byte
 
 	defer func() {
 		duration := time.Now().Sub(startTime)
-		if duration > 10*time.Millisecond || responseCode != 200 || !utils.IsProduction() {
+		if duration > logMinDuration || responseCode != 200 || !utils.IsProduction() {
 			log.Context(ctx).
 				With("requestPath", url).
 				With("requestMethod", method).
