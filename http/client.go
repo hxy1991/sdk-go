@@ -68,7 +68,7 @@ var client = xray.Client(&http.Client{
 })
 
 func Send(ctx context.Context, url, method string, requestBody []byte, headers map[string]string) (int, []byte, error) {
-	return SendWithTimeout(ctx, url, method, requestBody, headers, 5, 10*time.Millisecond)
+	return SendWithTimeout(ctx, url, method, requestBody, headers, 5, 20*time.Millisecond)
 }
 
 func SendWithLogMinDuration(ctx context.Context, url, method string, requestBody []byte, headers map[string]string, logMinDuration time.Duration) (int, []byte, error) {
