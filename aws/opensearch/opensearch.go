@@ -95,9 +95,7 @@ func New(ctx context.Context, indexName string) (openSearch *OpenSearch, err err
 	return &OpenSearch{client: client, indexName: indexName}, nil
 }
 
-func NewWithAuth(ctx context.Context, indexName, username, password string) (openSearch *OpenSearch, err error) {
-	openSearchConfig := getOpenSearchConfig(ctx)
-
+func NewWithAuth(ctx context.Context, indexName, domainEndpoint, username, password string) (openSearch *OpenSearch, err error) {
 	var transport http.RoundTripper
 	transport = &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
@@ -106,7 +104,7 @@ func NewWithAuth(ctx context.Context, indexName, username, password string) (ope
 	// https://opensearch.org/docs/latest/clients/go/
 	client, err := opensearch.NewClient(opensearch.Config{
 		Transport:            xray.RoundTripper(transport),
-		Addresses:            []string{openSearchConfig.domainEndpoint},
+		Addresses:            []string{domainEndpoint},
 		Username:             username,
 		Password:             password,
 		UseResponseCheckOnly: true,
