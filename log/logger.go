@@ -170,7 +170,7 @@ func (l *Logger) Context(ctx context.Context) (logger *Logger) {
 
 	handlerLabelKey, ok := ctx.Value(constant.HandlerLabelKey).(string)
 	if ok {
-		logger._logger = logger._logger.With(zap.String("handlerLabelKey", handlerLabelKey))
+		logger._logger = logger._logger.With(zap.String("handlerLabel", handlerLabelKey))
 	}
 
 	requestModule, ok := ctx.Value(constant.RequestModuleKey).(string)
