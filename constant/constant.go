@@ -16,6 +16,7 @@ const (
 	ClientVersion = "clientVersion"
 	ChannelIdKey  = "channelId"
 
+	HandlerLabelKey         = "handlerLabel"
 	RequestModuleKey        = "requestModule"
 	RequestActionKey        = "requestAction"
 	RequestSubActionsArrKey = "requestSubActions"
