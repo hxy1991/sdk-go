@@ -40,5 +40,11 @@ func BuildHeaderForRoute(ctx context.Context, service string, header http.Header
 	}
 	headers["Channel-Id"] = channelId
 
+	clientLogicVersion := header.Get("Client-Logic-Version")
+	if len(clientLogicVersion) == 0 {
+		clientLogicVersion = ""
+	}
+	headers["Client-Logic-Version"] = clientLogicVersion
+
 	return headers
 }
