@@ -13,8 +13,9 @@ const (
 	RequestPathKey = "requestPath"
 	RequestBodyKey = "requestBody"
 
-	ClientVersion = "clientVersion"
-	ChannelIdKey  = "channelId"
+	ClientVersion      = "clientVersion"
+	ClientLogicVersion = "clientLogicVersion"
+	ChannelIdKey       = "channelId"
 
 	HandlerLabelKey         = "handlerLabel"
 	RequestModuleKey        = "requestModule"

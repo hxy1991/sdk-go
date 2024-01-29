@@ -38,6 +38,11 @@ func WithValues(ctx context.Context, newCtx context.Context) context.Context {
 		newCtx = context.WithValue(newCtx, constant.ClientVersion, clientVersion)
 	}
 
+	clientLoginVersion := ctx.Value(constant.ClientLogicVersion)
+	if clientLoginVersion != nil {
+		newCtx = context.WithValue(newCtx, constant.ClientLogicVersion, clientLoginVersion)
+	}
+
 	channelIdKey := ctx.Value(constant.ChannelIdKey)
 	if channelIdKey != nil {
 		newCtx = context.WithValue(newCtx, constant.ChannelIdKey, channelIdKey)
