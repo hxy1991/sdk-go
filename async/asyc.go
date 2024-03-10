@@ -8,7 +8,11 @@ import (
 )
 
 func Go(ctx context.Context, name string, fn func(context.Context)) {
-	if xray.SdkDisabled() {
+	GoV1(ctx, name, fn, false)
+}
+
+func GoV1(ctx context.Context, name string, fn func(context.Context), xrayDisabled bool) {
+	if xray.SdkDisabled() || xrayDisabled {
 		go func() {
 			defer func() {
 				if e := recover(); e != nil {
