@@ -138,14 +138,24 @@ func (l *Logger) Context(ctx context.Context) (logger *Logger) {
 		ctx:     ctx,
 	}
 
-	traceId := xray.TraceID(ctx)
-	if traceId != "" {
-		logger._logger = logger._logger.With(zap.String("xray-trace-id", traceId))
+	traceId, ok := ctx.Value(constant.TraceIdKey).(string)
+	if ok {
+		logger._logger = logger._logger.With(zap.String("traceId", traceId))
+	}
+
+	xrayTraceId := xray.TraceID(ctx)
+	if xrayTraceId != "" {
+		logger._logger = logger._logger.With(zap.String("xray-trace-id", xrayTraceId))
 	}
 
 	segment := xray.GetSegment(ctx)
 	if segment != nil && segment.ID != "" {
 		logger._logger = logger._logger.With(zap.String("xray-segment-id", segment.ID))
+	}
+
+	gameId, ok := ctx.Value(constant.GameIdKey).(string)
+	if ok {
+		logger._logger = logger._logger.With(zap.String("gameId", gameId))
 	}
 
 	userIdUint64, ok := ctx.Value(constant.UserIdUint64Key).(uint64)

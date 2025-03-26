@@ -23,4 +23,7 @@ const (
 	RequestSubActionsArrKey = "requestSubActions"
 	RequestSubActionsMD5Key = "requestSubActionsMD5"
 	ResponseErrorCodeIntKey = "responseErrorCode"
+
+	GameIdKey  = "gameId"
+	TraceIdKey = "traceId"
 )
