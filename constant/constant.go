@@ -26,4 +26,6 @@ const (
 
 	GameIdKey  = "gameId"
 	TraceIdKey = "traceId"
+
+	CustomMapKey = "customMap"
 )

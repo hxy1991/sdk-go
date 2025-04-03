@@ -208,5 +208,11 @@ func (l *Logger) Context(ctx context.Context) (logger *Logger) {
 		logger._logger = logger._logger.With(zap.Int("responseErrorCode", responseErrorCode))
 	}
 
+	customMap, ok := ctx.Value(constant.CustomMapKey).(map[string]interface{})
+	if ok {
+		list := utils.Map2Slice(customMap)
+		logger._logger = logger._logger.With(list...)
+	}
+
 	return logger
 }
