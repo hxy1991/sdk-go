@@ -10,6 +10,9 @@ const (
 	UserIdUint64Key    = "userIdUint64"
 	ServerIdIntKey     = "serverIdInt"
 
+	UserIdStrKey = "userIdStr"
+	DeviceIdKey  = "deviceId"
+
 	RequestPathKey = "requestPath"
 	RequestBodyKey = "requestBody"
 

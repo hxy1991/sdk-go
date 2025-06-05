@@ -153,6 +153,16 @@ func (l *Logger) Context(ctx context.Context) (logger *Logger) {
 		logger._logger = logger._logger.With(zap.String("xray-segment-id", segment.ID))
 	}
 
+	deviceId, ok := ctx.Value(constant.DeviceIdKey).(string)
+	if ok {
+		logger._logger = logger._logger.With(zap.String("deviceId", deviceId))
+	}
+
+	userIdStr, ok := ctx.Value(constant.UserIdStrKey).(string)
+	if ok {
+		logger._logger = logger._logger.With(zap.String("userIdStr", userIdStr))
+	}
+
 	gameId, ok := ctx.Value(constant.GameIdKey).(string)
 	if ok {
 		logger._logger = logger._logger.With(zap.String("gameId", gameId))
