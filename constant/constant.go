@@ -13,8 +13,9 @@ const (
 	UserIdStrKey = "userIdStr"
 	DeviceIdKey  = "deviceId"
 
-	RequestPathKey = "requestPath"
-	RequestBodyKey = "requestBody"
+	RequestPathKey     = "requestPath"
+	RequestBodyKey     = "requestBody"
+	RequestClientIPKey = "requestClientIP"
 
 	ClientVersion      = "clientVersion"
 	ClientLogicVersion = "clientLogicVersion"

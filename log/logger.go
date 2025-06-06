@@ -111,6 +111,11 @@ func (l *Logger) Errorf(template string, args ...interface{}) {
 
 func (l *Logger) withRequestMsg() {
 	if l.ctx != nil {
+		requestClientIP, ok := l.ctx.Value(constant.RequestClientIPKey).(string)
+		if ok {
+			l._logger = l._logger.With(zap.String("requestClientIP", requestClientIP))
+		}
+
 		requestPath, ok := l.ctx.Value(constant.RequestPathKey).(string)
 		if ok {
 			l._logger = l._logger.With(zap.String("requestPath", requestPath))
