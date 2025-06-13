@@ -143,6 +143,11 @@ func (l *Logger) Context(ctx context.Context) (logger *Logger) {
 		ctx:     ctx,
 	}
 
+	requestClientIP, ok := ctx.Value(constant.RequestClientIPKey).(string)
+	if ok {
+		logger._logger = logger._logger.With(zap.String(constant.RequestClientIPKey, requestClientIP))
+	}
+
 	traceId, ok := ctx.Value(constant.TraceIdKey).(string)
 	if ok {
 		logger._logger = logger._logger.With(zap.String("traceId", traceId))
